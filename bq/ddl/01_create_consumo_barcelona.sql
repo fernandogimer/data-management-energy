@@ -2,7 +2,7 @@
 -- Dataset destino: neat-tangent-472516-v8.Data_Management
 CREATE OR REPLACE TABLE `neat-tangent-472516-v8.Data_Management.consumo_barcelona`
 PARTITION BY fecha
-CLUSTER BY codigoo_postal, sector_economico
+CLUSTER BY codigo_postal, sector_economico
 AS
 WITH base AS (
   SELECT

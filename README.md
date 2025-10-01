@@ -11,7 +11,7 @@ Repositorio del proyecto de la asignatura Data Management.
 - Integrar CSV públicos de consumo (CP / sector / tramo horario, 2022–2025) en una tabla única particionada en BigQuery
 - Enriquecer con contexto (meteo, festivos y eventos/alertas) para explicar picos
 - Modelar (baseline + AutoML/ML en Azure) para mejorar la precisión frente a un baseline histórico
-- Medir y comunicar mediante KPIs (ej.: MAPE ≤ 25% en test) y dashboard
+- Medir y comunicar mediante KPIs (ej.: XX) y dashboard
 
 ---
 
@@ -19,11 +19,10 @@ Repositorio del proyecto de la asignatura Data Management.
 
 **Estructurados (BigQuery):** Unificar 2022–2025 en `Data_Management.consumo_barcelona` 
 - **Partition by:** `fecha`
-- **Cluster by:** `cp5`, `sector_economico`
+- **Cluster by:** `codigo_postal`, `sector_economico`
 
 **Vistas BI/ML:**
 - `vw_consumo_bcn_current` (filtro de calidad)
-- `vw_consumo_bcn_con_horas` (opcional, parseo de tramo)
 
 **Checks:** Nulos, negativos, duplicados y rangos
 

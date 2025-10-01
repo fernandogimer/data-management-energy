@@ -43,11 +43,10 @@ Google BigQuery (dataset: Data_Management)
     ↓
 (1) Tabla única: consumo_barcelona
     • Partition By: fecha (DATE)
-    • Cluster By: cp5, sector_economico
+    • Cluster By: codigo_postal, sector_economico
     ↓
 (2) Vistas:
     • vw_consumo_bcn_current (filtro calidad BI/ML)
-    • vw_consumo_bcn_con_horas (opcional: parseo de tramo → horas)
     ↓
 (3) BI: Power BI / Looker Studio
     ↓

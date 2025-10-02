@@ -2,7 +2,7 @@
 
 Repositorio del proyecto de la asignatura Data Management.
 
-**Objetivo:** Predecir y explicar la demanda energética en Barcelona integrando datos estructurados (BigQuery) y no estructurados / ML (Azure). Visualización en Power BI o Looker Studio.
+**Objetivo:** Predecir y explicar la demanda energética en Barcelona integrando datos estructurados (BigQuery) y no estructurados / ML (Azure). Visualización en Power BI/Looker Studio.
 
 ---
 
@@ -22,7 +22,7 @@ Repositorio del proyecto de la asignatura Data Management.
 - **Cluster by:** `codigo_postal`, `sector_economico`
 
 **Vistas BI/ML:**
-- `vw_consumo_bcn_current` (filtro de calidad)
+- Generar vista
 
 **Checks:** Nulos, negativos, duplicados y rangos
 
@@ -86,12 +86,6 @@ README.md
 .gitignore
 ```
 
-### Objetos BigQuery
-
-> **Nota:** Ajusta el `projectId` si cambia
-
-- **Tabla:** `neat-tangent-472516-v8.Data_Management.consumo_barcelona`
-- **Vista (BI/ML):** `neat-tangent-472516-v8.Data_Management.vw_consumo_bcn_current`
 
 ---
 
@@ -104,7 +98,7 @@ README.md
 | Columna | Tipo | Descripción |
 |---------|------|-------------|
 | `fecha` | DATE | Fecha del registro |
-| `cp5` | STRING | Código postal (5 dígitos) |
+| `codigo_postal` | STRING | Código postal (5 dígitos) |
 | `sector_economico` | STRING | Sector económico |
 | `tramo_horario` | STRING | "De 00:00:00 a 06:00:00" / "No consta" |
 | `kwh` | FLOAT64 | Consumo del tramo en kWh |
@@ -128,34 +122,7 @@ Ejecuta en BigQuery:
 bq/ddl/01_create_consumo_barcelona.sql
 ```
 
-### 2. Crear vistas
-
-Ejecuta:
-
-```bash
-bq/views/vw_consumo_bcn_current.sql
-```
-
-Opcional:
-
-```bash
-bq/views/vw_consumo_bcn_con_horas.sql
-```
-
-### 3. Validar (checks)
-
-Ejecuta: 
-
-```bash
-bq/checks/checks_basicos.sql
-```
-
-Valida:
-- Rango por `anio_origen`
-- Nulos/negativos en `kwh`
-- Duplicados por clave lógica (`fecha`+`cp5`+`tramo_horario`+`sector_economico`)
-
-### 4. Conectar BI
+### 2. Conectar BI
 
 Conecta Power BI / Looker Studio a `vw_consumo_bcn_current`
 
@@ -165,110 +132,15 @@ Conecta Power BI / Looker Studio a `vw_consumo_bcn_current`
 
 - **Completitud:** `kwh` no nulo ≥ 99%
 - **Validez:** `kwh` ≥ 0; `fecha` en rango dataset
-- **Unicidad lógica:** (`fecha`, `cp5`, `tramo_horario`, `sector_economico`) sin duplicados
+- **Unicidad lógica:** (`fecha`, `codigoo_postal`, `tramo_horario`, `sector_economico`) sin duplicados
 - **Trazabilidad:** `anio_origen`, `load_ts`
-
-### Ejemplos de checks
-
-Inclúyelos en tu archivo `checks_basicos.sql`:
-
-```sql
--- Nulos/negativos
-SELECT 
-  SUM(kwh IS NULL) AS nulos, 
-  SUM(kwh < 0) AS negativos
-FROM `neat-tangent-472516-v8.Data_Management.consumo_barcelona`;
-
--- Duplicados por clave lógica
-SELECT 
-  fecha, 
-  cp5, 
-  tramo_horario, 
-  sector_economico, 
-  COUNT(*) AS cnt
-FROM `neat-tangent-472516-v8.Data_Management.consumo_barcelona`
-GROUP BY 1, 2, 3, 4
-HAVING COUNT(*) > 1
-ORDER BY cnt DESC
-LIMIT 50;
-```
 
 ---
 
 ## 📊 KPIs
 
-- **Principal (ejemplo):** MAPE test ≤ 25%
-- **Secundarios:** RMSE/MAE por CP/sector/mes; % de picos explicados por eventos
-- **Operativos:** Tiempo de refresh; bytes escaneados por consulta
+aplicar kpis que seleccionamos
 
----
-
-## 🔐 Buenas prácticas
-
-### Particionado
-
-Filtra siempre por `fecha` para reducir costes (partition pruning)
-
-### Descripciones en BQ
-
-```sql
-ALTER TABLE `neat-tangent-472516-v8.Data_Management.consumo_barcelona`
-SET OPTIONS (
-  description = 'Histórico BCN 2022–2025 unificado, particionado por fecha'
-);
-
-ALTER TABLE `neat-tangent-472516-v8.Data_Management.consumo_barcelona`
-ALTER COLUMN kwh SET OPTIONS (
-  description = 'kWh por tramo/CP/sector'
-);
-```
-
-### Evolución sin romper BI
-
-Usa vistas como capa estable; para cambios mayores, crea `*_v2` y re-apunta la vista
-
----
-
-## 👥 Colaboración (equipo)
-
-### Ramas
-
-- **`main`** (protegida)
-- **`feat/<cambio>`** (una por tarea)
-
-### Flujo
-
-1. Crear rama
-2. Editar SQL/docs
-3. Commit
-4. (Opcional) PR/revisión
-5. Ejecutar SQL
-6. Actualizar `docs/decisiones.md`
-
-### RACI sugerido
-
-- **Data Eng.:** Ingestión / curated / calidad
-- **ML/Analytics:** Features / modelo / validación
-- **BI/PM:** Vistas para BI, dashboard, storytelling
-
----
-
-## 🛣️ Roadmap (próxima iteración)
-
-- [ ] `vw_consumo_bcn_con_horas` (parseo horario)
-- [ ] Ingesta meteo (AEMET/Meteocat) y festivos (ICS)
-- [ ] Vista `vw_consumo_eventos` (join consumo + contexto)
-- [ ] Baseline ML + AutoML en Azure
-- [ ] Dashboard final (KPI, real vs. pred, explicaciones por evento)
-
----
-
-## 📚 Referencias
-
-- [Open Data BCN](https://opendata-ajuntament.barcelona.cat/) (consumo por CP/sector/tramo)
-- [REE/ESIOS](https://www.esios.ree.es/) (demanda/mercado)
-- [AEMET](https://www.aemet.es/) / [Meteocat](https://www.meteo.cat/) (clima)
-- [PROCICAT](https://interior.gencat.cat/ca/arees_dactuacio/proteccio_civil/) / [Turisme BCN](https://www.barcelonaturisme.com/) / [Fira de Barcelona](https://www.firabarcelona.com/) (eventos/alertas)
 
 ---
 

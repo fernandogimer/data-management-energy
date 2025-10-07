@@ -1,4 +1,4 @@
-Corresponde a la limpieza de los datos, para tener una tabla silver.
+-- Corresponde a la limpieza de los datos, para tener una tabla silver.
 
 CREATE OR REPLACE TABLE `neat-tangent-472516-v8.Data_Management.silver_consumo_barcelona`
 PARTITION BY fecha

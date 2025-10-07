@@ -1,5 +1,4 @@
--- Corresponde a la limpieza de los datos, para tener una tabla silver.
-
+-- SILVER (curada): sin "No consta" y sin nulos/negativos
 CREATE OR REPLACE TABLE `neat-tangent-472516-v8.Data_Management.silver_consumo_barcelona`
 PARTITION BY fecha
 CLUSTER BY codigo_postal, sector_economico

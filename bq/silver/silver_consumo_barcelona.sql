@@ -1,1 +1,20 @@
-
+-- SILVER (curada): sin "No consta" y sin nulos/negativos
+CREATE OR REPLACE TABLE `neat-tangent-472516-v8.Data_Management.silver_consumo_barcelona`
+PARTITION BY fecha
+CLUSTER BY codigo_postal, sector_economico
+AS
+WITH base AS (
+  SELECT
+    fecha,
+    codigo_postal,
+    sector_economico,
+    tramo_horario,
+    kwh,
+    anio_origen,
+    load_ts
+  FROM `neat-tangent-472516-v8.Data_Management.consumo_barcelona`
+  WHERE tramo_horario <> 'No consta'
+    AND kwh IS NOT NULL
+    AND kwh >= 0
+)
+SELECT * FROM base;

@@ -51,7 +51,7 @@ ESTACIONES_BARCELONA = ['X4', 'X8', 'D5']
 VARIABLES_DE_INTERES = ['32', '33', '35', '30', '36'] # Temp, Humedad, Precip, Viento, Rad. Solar
 
 # Se establece la fecha de inicio a partir de la cual se descargarán los datos.
-START_DATE = datetime(2022, 1, 1)
+START_DATE = datetime(2021, 1, 1)
 
 # Se define la URL base del "recurso" de la API. Sobre esta URL se construirán las consultas.
 RESOURCE_URL = "https://analisi.transparenciacatalunya.cat/resource/nzvn-apee.json"

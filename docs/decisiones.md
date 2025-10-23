@@ -70,3 +70,22 @@ La capa Silver ahora consiste en un modelo relacional normalizado (3NF) compuest
 *   **`gold_data.modelo_final`**:
     *   **Propósito:** Servir como la tabla de entrada final para el entrenamiento de modelos de Machine Learning.
     *   **Características:** Es una **denormalización controlada** de la capa Silver. Se construye uniendo todas las tablas de hechos y dimensiones a través de sus claves (`JOIN`), creando una única tabla ancha y plana, optimizada para el consumo de algoritmos de ML.
+
+
+# Registro de Decisiones de Arquitectura (ADR)
+
+## ADR-001: Adopción de Arquitectura Medallion en BigQuery
+
+*   **Decisión:** Se decidió estructurar el Data Warehouse en BigQuery siguiendo la Arquitectura Medallion (Bronze, Silver, Gold).
+*   **Justificación:** Este enfoque separa los datos crudos (Bronze), de los datos limpios y normalizados (Silver), y de los datos agregados para el consumo (Gold). Mejora la calidad, la trazabilidad y la reutilización de los datos.
+
+## ADR-002: Implementación de Modelo en Estrella en la Capa Silver
+
+*   **Decisión:** La capa Silver se diseñó como un Modelo en Estrella, separando las métricas (Tablas de Hechos) del contexto descriptivo (Tablas de Dimensiones).
+*   **Justificación:** Este modelo es el estándar de la industria para BI y análisis. Reduce la redundancia, mejora el rendimiento de las consultas y simplifica la comprensión de los datos al crear una "única fuente de la verdad" para cada entidad de negocio (Tiempo, Geografía, etc.).
+
+## ADR-003: Entrenamiento Local del Modelo de ML
+
+*   **Decisión:** El modelo de Machine Learning (XGBoost) se entrena localmente en el entorno de desarrollo, consumiendo datos de la tabla Gold de BigQuery.
+*   **Justificación:** Entrenar localmente acelera el ciclo de desarrollo y depuración. El Azure ML Workspace se reserva para una futura fase de MLOps, donde se orquestaría el re-entrenamiento y despliegue automatizado del modelo.
+

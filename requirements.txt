@@ -1,10 +1,11 @@
-pandas
+pandas==1.5.3
 requests
 python-dotenv
 google-cloud-storage
 pyarrow
 db-dtypes
-scikit-learn
-xgboost
-shap
+scikit-learn==1.2.2
+xgboost==1.7.6
+shap==0.41.0
 pandas-gbq
+matplotlib

@@ -89,3 +89,11 @@ La capa Silver ahora consiste en un modelo relacional normalizado (3NF) compuest
 *   **Decisión:** El modelo de Machine Learning (XGBoost) se entrena localmente en el entorno de desarrollo, consumiendo datos de la tabla Gold de BigQuery.
 *   **Justificación:** Entrenar localmente acelera el ciclo de desarrollo y depuración. El Azure ML Workspace se reserva para una futura fase de MLOps, donde se orquestaría el re-entrenamiento y despliegue automatizado del modelo.
 
+*   **Decisión:** Se creó una nueva tabla `dim_fiestas_barrio` unificando dos fuentes de datos de eventos (`FiestasBarrio` y `raw_historico_eventos`).
+ *   **Justificación:** En lugar de depender de una sola fuente, se combinan ambas para crear una dimensión de contexto más rica. Se implementó una lógica de desduplicación y expansión de fechas para asegurar una fila única por día y zona geográfica.
+
+ ## ADR-005: Creación de Tabla Gold Incremental (v2)
+
+ *   **Decisión:** Se creó una nueva tabla `modelo_final_v2` que lee de la tabla Gold `modelo_final` y la enriquece con la nueva dimensión de eventos.
+ *   **Justificación:** Este enfoque modular permite añadir nuevas características a la tabla de modelado sin tener que reconstruir toda la lógica de unión desde cero, facilitando el mantenimiento y la experimentación.
+ ```

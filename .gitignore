@@ -1,19 +1,32 @@
-# Entorno virtual de Python
-# Ignora la carpeta que contiene todas las librerías instaladas.
-# Es específica de tu sistema operativo y se puede recrear fácilmente.
+# Jupyter Notebook
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Datos sensibles
+data/*.csv
+data/*.xlsx
+*.json
+credentials.json
+*credentials*
+
+# BigQuery
+application_default_credentials.json
+
+# Entornos virtuales
+venv/
+env/
 .venv/
 
-# Archivo de variables de entorno
-# ¡CRÍTICO! Este archivo contendrá tus contraseñas y API keys.
-# NUNCA debe subirse a un repositorio público.
-.env
+# VS Code
+.vscode/
 
-# Archivos de credenciales de Google Cloud
-# Ignora cualquier archivo que termine en .json. Usamos esto como una
-# red de seguridad para no subir accidentalmente el archivo de credenciales de GCP.
-*.json
+# Sistema
+.DS_Store
+Thumbs.db
 
-# Carpetas de caché de Python
-# Python crea estas carpetas automáticamente para que el código se ejecute más rápido.
-# Son "basura" temporal que no necesita ser compartida.
-__pycache__/

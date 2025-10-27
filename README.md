@@ -153,6 +153,15 @@ _[Especifica tu licencia aquí]_
 _[Añade los nombres del equipo aquí]_
 ---
 
+## Subproyecto: Pipeline de Ingesta y Enriquecimiento NLP con Databricks
+
+Como parte del proceso de ingesta de datos, se desarrolló un pipeline de datos independiente en **Azure Databricks** para generar y enriquecer una de las fuentes de datos.
+
+- **Objetivo:** Demostrar la orquestación de un pipeline end-to-end en Databricks, incluyendo la simulación de datos, el enriquecimiento con una API de IA Generativa (Google Gemini) y la exportación de resultados a BigQuery.
+- **Tecnologías:** Azure Databricks, Python (PySpark, Pandas), Google Gemini API.
+- **Resultado:** La tabla `bronze_data.precios_actividad_nlp_manual` en BigQuery.
+- **Detalles:** Ver el [informe técnico completo](docs/informe_pipeline_nlp.md) y el [código del notebook](notebooks/databricks/pipeline_databricks_nlp.py).
+
 
 
 
